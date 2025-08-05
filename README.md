@@ -177,4 +177,4 @@ Edit `docker-compose.yml` to tweak ports, volumes, replicas.
 * Unit & integration test coverage  
 
 ## License
-MIT — © 2025 TrackSwift Contributors
+MIT — © 2025 TrackSwift Contributors"# trackswift-frontend" 
