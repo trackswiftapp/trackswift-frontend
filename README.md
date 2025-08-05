@@ -1,70 +1,180 @@
-# Getting Started with Create React App
+# TrackSwift &nbsp;🚀
+*A full-stack financial management application built with the MERN stack.*
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Table of Contents
+1. [Key Features](#key-features)  
+2. [Tech Stack](#tech-stack)  
+3. [Project Structure](#project-structure)  
+4. [Prerequisites](#prerequisites)  
+5. [Quick Start (5 min)](#quick-start-5-min)  
+6. [Detailed Installation](#detailed-installation)  
+   1. [Backend](#backend)  
+   2. [Frontend](#frontend)  
+   3. [Docker Compose (optional)](#docker-compose-optional)  
+7. [Environment Variables](#environment-variables)  
+8. [NPM Scripts Reference](#npm-scripts-reference)  
+9. [Default Credentials](#default-credentials)  
+10. [Troubleshooting](#troubleshooting)  
+11. [Roadmap](#roadmap)  
+12. [License](#license)  
 
-## Available Scripts
+## Key Features
+* **Authentication** – Single admin stored in `config/admin.json` + UI-managed users.  
+* **Dashboard** – Sales, expenses, profit, recent activity, low-stock alerts.  
+* **Vendors** – Full CRUD, invoice aggregation, CSV export.  
+* **Invoices** – Multi-invoice per vendor, balance tracking, branded PDF download.  
+* **Inventory** – Real-time stock, low-stock warnings, valuation by bought price.  
+* **Sales** – Itemised sales, credit handling, stock auto-deduction.  
+* **Expenses** – Categorised expenses that affect profit analytics.  
+* **Reports** – PDF & CSV exports for sales, expenses, inventory.  
+* **Currency** – All monetary values formatted in OMR.  
 
-In the project directory, you can run:
+## Tech Stack
+| Layer      | Technology |
+|------------|------------|
+| Frontend   | React 18, React Router DOM 6, Axios, React Query, Tailwind CSS, Recharts |
+| Backend    | Node.js 18, Express 4, MongoDB 6 (Mongoose 7) |
+| Auth       | JSON Web Tokens, bcryptjs |
+| PDF/CSV    | Puppeteer, fast-csv |
+| Dev & Ops  | React Scripts, Nodemon, PM2, Docker Compose |
 
-### `npm start`
+## Project Structure
+```
+trackswift/
+├── backend/
+│   ├── config/           # DB config + admin.json
+│   ├── controllers/      # Route handlers
+│   ├── middleware/       # Auth & misc
+│   ├── models/           # Mongoose schemas
+│   ├── routes/           # Express routers
+│   ├── utils/            # pdfGenerator, csvExporter
+│   ├── uploads/          # Company logo, file uploads
+│   ├── server.js
+│   └── package.json
+└── frontend/
+    ├── public/
+    ├── src/
+    │   ├── components/   # Reusable UI
+    │   ├── pages/        # Route pages
+    │   ├── services/     # Axios instance
+    │   ├── context/      # Auth provider
+    │   ├── utils/        # helpers
+    │   ├── App.js
+    │   └── index.js
+    ├── tailwind.config.js
+    └── package.json
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Prerequisites
+* **Node.js 16+** – https://nodejs.org  
+* **MongoDB Community 4.4+** (local or Atlas)  
+* **Git**  
+* (Optional) **Docker Engine 20+**
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Quick Start (5 min)
 
-### `npm test`
+```bash
+# 1. Clone
+git clone https://github.com/your-org/trackswift.git
+cd trackswift
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# 2. Backend
+cd backend
+cp .env.example .env         # edit if needed
+npm install
+npm run dev                  # http://localhost:5000
 
-### `npm run build`
+# 3. Frontend (new terminal)
+cd ../frontend
+npm install
+npm start                    # http://localhost:3000
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# 4. Login
+Username: admin
+Password: admin123
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Detailed Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Backend
+```bash
+cd trackswift/backend
 
-### `npm run eject`
+# Environment
+cp .env.example .env
+# sample values
+# MONGODB_URI=mongodb://localhost:27017/trackswift
+# JWT_SECRET=super-secret
+# FRONTEND_URL=http://localhost:3000
+# PORT=5000
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# Install & run
+npm install
+npm run dev            # hot-reload with nodemon
+```
+*Change the admin password immediately after first login – Users → Admin → Edit.*
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Frontend
+```bash
+cd trackswift/frontend
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# (Optional) point to remote API
+echo "REACT_APP_API_URL=http://localhost:5000/api" > .env
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+npm install
+npm start
+```
+The React dev-server opens at `http://localhost:3000`.
 
-## Learn More
+### Docker Compose (optional)
+```
+docker compose up -d          # builds frontend + backend + MongoDB
+```
+Edit `docker-compose.yml` to tweak ports, volumes, replicas.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Environment Variables
+| Variable           | Location   | Default               | Purpose                            |
+|--------------------|------------|-----------------------|------------------------------------|
+| MONGODB_URI        | backend    | mongodb://localhost…  | Mongo connection string            |
+| JWT_SECRET         | backend    | *change-me*           | JWT signing key                    |
+| PORT               | backend    | 5000                  | Express port                       |
+| FRONTEND_URL       | backend    | http://localhost:3000 | CORS origin                        |
+| REACT_APP_API_URL  | frontend   | http://localhost:5000/api | Axios base URL                 |
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## NPM Scripts Reference
 
-### Code Splitting
+| Folder   | Script          | What it does                                 |
+|----------|-----------------|----------------------------------------------|
+| backend  | `npm run dev`   | Nodemon + auto-reload                        |
+| backend  | `npm start`     | Production server                            |
+| backend  | `npm test`      | *(placeholder)* unit tests                   |
+| frontend | `npm start`     | React dev-server with HMR                    |
+| frontend | `npm run build` | Production build to `/build`                 |
+| frontend | `npm test`      | React tests                                  |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Default Credentials
+| Role  | Username | Password  |
+|-------|----------|-----------|
+| Admin | `admin`  | `admin123`|
 
-### Analyzing the Bundle Size
+**Change these immediately** → Settings → Users.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Troubleshooting
 
-### Making a Progressive Web App
+| Symptom                                                    | Fix |
+|------------------------------------------------------------|-----|
+| `Cannot find module 'ajv/dist/compile/codegen'` when `npm start` (frontend) | Delete `node_modules` & `package-lock.json`, run:`npm cache clean --force``npm install` |
+| Frontend shows **CORS** error                              | Ensure `FRONTEND_URL` in backend `.env` matches browser origin |
+| MongoDB connection refused                                 | Check `MONGODB_URI`, ensure Mongo service is running |
+| Port `3000` or `5000` already in use                       | `set PORT=3001` (Win) / `PORT=3001 npm start` (Unix) |
+| PDF downloads are blank                                    | Put your logo at `backend/uploads/logo.png` or adjust `pdfGenerator.js` |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Roadmap
+* Mobile PWA & offline mode  
+* Purchase-order & barcode scanning  
+* Multi-currency support  
+* Role-based permissions  
+* Unit & integration test coverage  
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+MIT — © 2025 TrackSwift Contributors

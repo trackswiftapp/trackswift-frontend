@@ -1,3 +1,78 @@
-# https://www.robotstxt.org/robotstxt.html
+# TrackSwift Financial Management System
+# https://trackswift.app
+
 User-agent: *
-Disallow:
+Allow: /
+
+# Public pages that can be indexed
+Allow: /
+Allow: /login
+
+# Private application routes - block from indexing
+Disallow: /dashboard
+Disallow: /vendors
+Disallow: /invoices
+Disallow: /inventory
+Disallow: /sales
+Disallow: /expenses
+Disallow: /reports
+Disallow: /users
+Disallow: /api/
+
+# Block sensitive files
+Disallow: /*.json$
+Disallow: /static/js/
+Disallow: /static/css/
+Disallow: /*?*
+
+# Allow images for social sharing
+Allow: /static/media/
+Allow: /logo192.png
+Allow: /logo512.png
+Allow: /og-image.png
+Allow: /apple-touch-icon.png
+
+# Crawl delay
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://trackswift.app/sitemap.xml
+
+# Common bot directives
+User-agent: Googlebot
+Allow: /
+Disallow: /dashboard
+Disallow: /api/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /dashboard
+Disallow: /api/
+
+User-agent: Slurp
+Allow: /
+Disallow: /dashboard
+Disallow: /api/
+
+# Block aggressive crawlers
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Security scanners
+User-agent: Nmap
+Disallow: /
+
+User-agent: Nikto
+Disallow: /
+
+User-agent: sqlmap
+Disallow: /
